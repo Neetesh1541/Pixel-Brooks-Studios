@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoAsset from "@/assets/nexgen-logo.asset.json";
+import logoUrl from "@/assets/nexgen-logo.png";
 
 export function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [progress, setProgress] = useState(0);
@@ -43,7 +43,7 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
               <div className="absolute inset-0 rounded-full animate-pulse-ring border border-white/30" />
               <div className="absolute inset-0 rounded-full animate-pulse-ring border border-white/20" style={{ animationDelay: "0.6s" }} />
               <div className="relative h-32 w-32 rounded-3xl glass-strong flex items-center justify-center glow-brand">
-                <img src={logoAsset.url} alt="NexGen" className="h-24 w-24 object-contain" />
+                <img src={logoUrl} alt="NexGen" className="h-24 w-24 object-contain" />
               </div>
             </div>
 

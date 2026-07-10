@@ -1,6 +1,16 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import logoAsset from "@/assets/nexgen-logo.asset.json";
+import logoUrl from "@/assets/nexgen-logo.png";
+import svcWeb from "@/assets/svc-web.jpg";
+import svcUiux from "@/assets/svc-uiux.jpg";
+import svcBrand from "@/assets/svc-brand.jpg";
+import svcAi from "@/assets/svc-ai.jpg";
+import svcSaas from "@/assets/svc-saas.jpg";
+import svcMobile from "@/assets/svc-mobile.jpg";
+import projLumen from "@/assets/proj-lumen.jpg";
+import projOrbit from "@/assets/proj-orbit.jpg";
+import projNova from "@/assets/proj-nova.jpg";
+import projHelix from "@/assets/proj-helix.jpg";
 import { createFileRoute } from "@tanstack/react-router";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { CustomCursor } from "@/components/CustomCursor";
@@ -176,7 +186,7 @@ function Nav() {
     >
       <nav className="flex items-center justify-between px-3 py-2.5">
         <a href="#top" className="flex items-center gap-2 pl-2" data-cursor="hover">
-          <img src={logoAsset.url} alt="NexGen" className="h-8 w-8 object-contain" />
+          <img src={logoUrl} alt="NexGen" className="h-8 w-8 object-contain" />
           <span className="font-display text-lg font-bold tracking-tight">NexGen</span>
         </a>
         <ul className="hidden items-center gap-1 md:flex">
@@ -394,7 +404,7 @@ function Hero() {
                 </div>
                 <div className="col-span-3 space-y-3">
                   <div className="grid grid-cols-3 gap-3">
-                    {[{ l: "Revenue", v: "$248K", d: "+24%" }, { l: "Active Users", v: "18.4K", d: "+12%" }, { l: "Automations", v: "1.2M", d: "+38%" }].map((k) => (
+                    {[{ l: "Revenue", v: "$62K", d: "+18%" }, { l: "Active Users", v: "2.4K", d: "+9%" }, { l: "Automations", v: "184", d: "+22%" }].map((k) => (
                       <div key={k.l} className="rounded-xl glass p-4 text-left">
                         <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{k.l}</div>
                         <div className="mt-1 font-display text-2xl font-bold">{k.v}</div>
@@ -445,16 +455,12 @@ function Marquee() {
 // ============ SERVICES ============
 
 const services = [
-  { title: "Website Development", desc: "Cinematic, performance-first sites engineered for conversion.", icon: "◆" },
-  { title: "UI / UX Design", desc: "Interfaces that feel inevitable — clarity, hierarchy, delight.", icon: "◇" },
-  { title: "Branding", desc: "Identity systems that make you unforgettable.", icon: "✦" },
-  { title: "AI Automation", desc: "Custom AI workflows that replace repetitive work.", icon: "✧" },
-  { title: "SaaS Development", desc: "Ship production-grade platforms with real product craft.", icon: "▲" },
-  { title: "Custom Software", desc: "Bespoke tools engineered around your unique operations.", icon: "△" },
-  { title: "Mobile Apps", desc: "Native-feeling iOS & Android experiences.", icon: "◉" },
-  { title: "SEO", desc: "Technical SEO and content that compounds.", icon: "◎" },
-  { title: "Digital Marketing", desc: "Data-driven campaigns across every surface.", icon: "✺" },
-  { title: "Business Automation", desc: "Connect stacks. Kill busywork. Scale operations.", icon: "❖" },
+  { title: "Website Development", desc: "Cinematic, performance-first sites engineered for conversion.", img: svcWeb },
+  { title: "UI / UX Design", desc: "Interfaces that feel inevitable — clarity, hierarchy, delight.", img: svcUiux },
+  { title: "Branding", desc: "Identity systems that make you unforgettable.", img: svcBrand },
+  { title: "AI Automation", desc: "Custom AI workflows that replace repetitive work.", img: svcAi },
+  { title: "SaaS Development", desc: "Ship production-grade platforms with real product craft.", img: svcSaas },
+  { title: "Mobile Apps", desc: "Native-feeling iOS & Android experiences.", img: svcMobile },
 ];
 
 function Services() {
@@ -476,16 +482,24 @@ function Services() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
             >
-              <TiltCard className="group relative h-full overflow-hidden rounded-3xl glass p-7 transition-all hover:glass-strong hover:glow-brand">
+              <TiltCard className="group relative h-full overflow-hidden rounded-3xl glass transition-all hover:glass-strong hover:glow-brand">
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    loading="lazy"
+                    width={1024}
+                    height={768}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                </div>
                 <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity group-hover:opacity-60"
                   style={{ background: "var(--gradient-brand)" }} />
-                <div className="relative">
-                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl glass-strong text-2xl text-gradient">
-                    {s.icon}
-                  </div>
+                <div className="relative p-7">
                   <h3 className="font-display text-xl font-semibold">{s.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-                  <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground">
+                  <div className="mt-5 flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground">
                     Explore <span className="transition-transform group-hover:translate-x-1">→</span>
                   </div>
                 </div>
@@ -501,10 +515,10 @@ function Services() {
 // ============ PORTFOLIO ============
 
 const projects = [
-  { title: "Lumen AI", tag: "SaaS · Platform", grad: "from-fuchsia-500 to-indigo-500" },
-  { title: "Orbit Finance", tag: "Fintech · Web", grad: "from-cyan-400 to-blue-600" },
-  { title: "Nova Studio", tag: "Brand · Identity", grad: "from-rose-400 to-purple-600" },
-  { title: "Helix Health", tag: "Mobile · App", grad: "from-emerald-400 to-teal-600" },
+  { title: "Lumen AI", tag: "SaaS · Platform", img: projLumen },
+  { title: "Orbit Finance", tag: "Fintech · Web", img: projOrbit },
+  { title: "Nova Studio", tag: "Brand · Identity", img: projNova },
+  { title: "Helix Health", tag: "Mobile · App", img: projHelix },
 ];
 
 function Portfolio() {
@@ -530,28 +544,17 @@ function Portfolio() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.7, delay: (i % 2) * 0.1 }}
             >
-              <TiltCard className="group relative overflow-hidden rounded-3xl glass p-6 hover:glass-strong transition-all">
-                <div className={`relative aspect-[16/10] overflow-hidden rounded-2xl bg-gradient-to-br ${p.grad}`}>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3),transparent_50%)]" />
-                  {/* laptop mock */}
-                  <div className="absolute inset-x-8 bottom-0 top-8 rounded-t-xl glass-strong p-2 transition-transform duration-700 group-hover:-translate-y-2">
-                    <div className="h-full rounded-lg bg-black/40 p-3">
-                      <div className="mb-2 flex gap-1">
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-2 w-1/2 rounded bg-white/30" />
-                        <div className="h-2 w-3/4 rounded bg-white/20" />
-                        <div className="mt-3 grid grid-cols-3 gap-2">
-                          <div className="h-10 rounded bg-white/15" />
-                          <div className="h-10 rounded bg-white/25" />
-                          <div className="h-10 rounded bg-white/15" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              <TiltCard className="group relative overflow-hidden rounded-3xl glass p-4 hover:glass-strong transition-all">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    loading="lazy"
+                    width={1280}
+                    height={800}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                 </div>
                 <div className="mt-5 flex items-center justify-between">
                   <div>
@@ -630,10 +633,10 @@ function Process() {
 
 function Why() {
   const stats = [
-    { v: 240, s: "+", l: "Projects Shipped" },
-    { v: 98, s: "%", l: "Client Retention" },
-    { v: 42, s: "M+", l: "Users Impacted" },
-    { v: 15, s: "×", l: "Avg ROI" },
+    { v: 48, s: "+", l: "Projects Shipped" },
+    { v: 96, s: "%", l: "Client Retention" },
+    { v: 12, s: "+", l: "Countries Served" },
+    { v: 5, s: "×", l: "Avg ROI" },
   ];
   return (
     <section id="why" className="relative py-32 noise">
@@ -869,7 +872,7 @@ function Footer() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3">
-                <img src={logoAsset.url} alt="NexGen" className="h-10 w-10" />
+                <img src={logoUrl} alt="NexGen" className="h-10 w-10" />
                 <span className="font-display text-2xl font-bold">NexGen</span>
               </div>
               <p className="mt-4 max-w-sm text-sm text-muted-foreground">
@@ -947,29 +950,134 @@ function BackToTop() {
   );
 }
 
+type ChatMsg = { role: "user" | "assistant"; content: string };
+
 function ChatWidget() {
   const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<ChatMsg[]>([
+    { role: "assistant", content: "Hey 👋 I'm NexGen AI. Tell me about your project — what are you building and when do you need to launch?" },
+  ]);
+  const [loading, setLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, loading]);
+
+  async function send() {
+    const text = input.trim();
+    if (!text || loading) return;
+    const next: ChatMsg[] = [...messages, { role: "user", content: text }];
+    setMessages(next);
+    setInput("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: next }),
+      });
+      if (!res.ok || !res.body) throw new Error("network");
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+      let assistant = "";
+      setMessages((m) => [...m, { role: "assistant", content: "" }]);
+      let buf = "";
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buf += value;
+        const lines = buf.split("\n");
+        buf = lines.pop() ?? "";
+        for (const line of lines) {
+          if (!line.startsWith("data:")) continue;
+          const data = line.slice(5).trim();
+          if (!data || data === "[DONE]") continue;
+          try {
+            const j = JSON.parse(data);
+            const delta = j.choices?.[0]?.delta?.content ?? "";
+            if (delta) {
+              assistant += delta;
+              setMessages((m) => {
+                const copy = m.slice();
+                copy[copy.length - 1] = { role: "assistant", content: assistant };
+                return copy;
+              });
+            }
+          } catch { /* ignore */ }
+        }
+      }
+      if (!assistant) {
+        setMessages((m) => {
+          const copy = m.slice();
+          copy[copy.length - 1] = { role: "assistant", content: "Sorry — I couldn't reach the AI just now. Try again in a moment, or email hello@nexgen.studio." };
+          return copy;
+        });
+      }
+    } catch {
+      setMessages((m) => [...m, { role: "assistant", content: "Connection issue. Please try again, or email hello@nexgen.studio." }]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="fixed bottom-6 left-6 z-40">
-      {open && (
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          className="mb-3 w-72 rounded-3xl glass-strong p-4"
-        >
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full" style={{ background: "var(--gradient-brand)" }}>✦</div>
-            <div>
-              <div className="text-sm font-semibold">NexGen AI</div>
-              <div className="text-[10px] text-emerald-400">● Online</div>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="mb-3 w-[340px] rounded-3xl glass-strong p-4"
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full text-white" style={{ background: "var(--gradient-brand)" }}>✦</div>
+              <div>
+                <div className="text-sm font-semibold">NexGen AI</div>
+                <div className="text-[10px] text-emerald-400">● Online</div>
+              </div>
             </div>
-          </div>
-          <div className="mt-3 rounded-xl bg-white/5 p-3 text-xs text-muted-foreground">
-            Hey 👋 — tell me about your project and I'll route you to the right expert.
-          </div>
-          <input placeholder="Type a message…" className="mt-3 w-full rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs outline-none" />
-        </motion.div>
-      )}
+            <div ref={scrollRef} className="mt-3 max-h-72 space-y-2 overflow-y-auto pr-1">
+              {messages.map((m, i) => (
+                <div
+                  key={i}
+                  className={`rounded-2xl px-3 py-2 text-xs leading-relaxed ${
+                    m.role === "user"
+                      ? "ml-6 text-white"
+                      : "mr-6 bg-white/5 text-foreground/90"
+                  }`}
+                  style={m.role === "user" ? { background: "var(--gradient-brand)" } : undefined}
+                >
+                  {m.content || (loading && i === messages.length - 1 ? "…" : "")}
+                </div>
+              ))}
+              {loading && messages[messages.length - 1]?.role === "user" && (
+                <div className="mr-6 rounded-2xl bg-white/5 px-3 py-2 text-xs text-muted-foreground">Thinking…</div>
+              )}
+            </div>
+            <form
+              onSubmit={(e) => { e.preventDefault(); send(); }}
+              className="mt-3 flex items-center gap-2"
+            >
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type a message…"
+                className="flex-1 rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs outline-none focus:border-primary"
+              />
+              <button
+                type="submit"
+                disabled={loading || !input.trim()}
+                className="rounded-full px-3 py-2 text-xs text-white disabled:opacity-50"
+                style={{ background: "var(--gradient-brand)" }}
+              >
+                Send
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <button
         onClick={() => setOpen((o) => !o)}
         data-cursor="hover"
