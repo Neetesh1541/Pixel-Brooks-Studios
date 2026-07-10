@@ -455,16 +455,12 @@ function Marquee() {
 // ============ SERVICES ============
 
 const services = [
-  { title: "Website Development", desc: "Cinematic, performance-first sites engineered for conversion.", icon: "◆" },
-  { title: "UI / UX Design", desc: "Interfaces that feel inevitable — clarity, hierarchy, delight.", icon: "◇" },
-  { title: "Branding", desc: "Identity systems that make you unforgettable.", icon: "✦" },
-  { title: "AI Automation", desc: "Custom AI workflows that replace repetitive work.", icon: "✧" },
-  { title: "SaaS Development", desc: "Ship production-grade platforms with real product craft.", icon: "▲" },
-  { title: "Custom Software", desc: "Bespoke tools engineered around your unique operations.", icon: "△" },
-  { title: "Mobile Apps", desc: "Native-feeling iOS & Android experiences.", icon: "◉" },
-  { title: "SEO", desc: "Technical SEO and content that compounds.", icon: "◎" },
-  { title: "Digital Marketing", desc: "Data-driven campaigns across every surface.", icon: "✺" },
-  { title: "Business Automation", desc: "Connect stacks. Kill busywork. Scale operations.", icon: "❖" },
+  { title: "Website Development", desc: "Cinematic, performance-first sites engineered for conversion.", img: svcWeb },
+  { title: "UI / UX Design", desc: "Interfaces that feel inevitable — clarity, hierarchy, delight.", img: svcUiux },
+  { title: "Branding", desc: "Identity systems that make you unforgettable.", img: svcBrand },
+  { title: "AI Automation", desc: "Custom AI workflows that replace repetitive work.", img: svcAi },
+  { title: "SaaS Development", desc: "Ship production-grade platforms with real product craft.", img: svcSaas },
+  { title: "Mobile Apps", desc: "Native-feeling iOS & Android experiences.", img: svcMobile },
 ];
 
 function Services() {
