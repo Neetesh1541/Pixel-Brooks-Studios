@@ -515,10 +515,10 @@ function Services() {
 // ============ PORTFOLIO ============
 
 const projects = [
-  { title: "Lumen AI", tag: "SaaS · Platform", grad: "from-fuchsia-500 to-indigo-500" },
-  { title: "Orbit Finance", tag: "Fintech · Web", grad: "from-cyan-400 to-blue-600" },
-  { title: "Nova Studio", tag: "Brand · Identity", grad: "from-rose-400 to-purple-600" },
-  { title: "Helix Health", tag: "Mobile · App", grad: "from-emerald-400 to-teal-600" },
+  { title: "Lumen AI", tag: "SaaS · Platform", img: projLumen },
+  { title: "Orbit Finance", tag: "Fintech · Web", img: projOrbit },
+  { title: "Nova Studio", tag: "Brand · Identity", img: projNova },
+  { title: "Helix Health", tag: "Mobile · App", img: projHelix },
 ];
 
 function Portfolio() {
@@ -544,28 +544,17 @@ function Portfolio() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.7, delay: (i % 2) * 0.1 }}
             >
-              <TiltCard className="group relative overflow-hidden rounded-3xl glass p-6 hover:glass-strong transition-all">
-                <div className={`relative aspect-[16/10] overflow-hidden rounded-2xl bg-gradient-to-br ${p.grad}`}>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3),transparent_50%)]" />
-                  {/* laptop mock */}
-                  <div className="absolute inset-x-8 bottom-0 top-8 rounded-t-xl glass-strong p-2 transition-transform duration-700 group-hover:-translate-y-2">
-                    <div className="h-full rounded-lg bg-black/40 p-3">
-                      <div className="mb-2 flex gap-1">
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-2 w-1/2 rounded bg-white/30" />
-                        <div className="h-2 w-3/4 rounded bg-white/20" />
-                        <div className="mt-3 grid grid-cols-3 gap-2">
-                          <div className="h-10 rounded bg-white/15" />
-                          <div className="h-10 rounded bg-white/25" />
-                          <div className="h-10 rounded bg-white/15" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              <TiltCard className="group relative overflow-hidden rounded-3xl glass p-4 hover:glass-strong transition-all">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    loading="lazy"
+                    width={1280}
+                    height={800}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                 </div>
                 <div className="mt-5 flex items-center justify-between">
                   <div>
@@ -644,10 +633,10 @@ function Process() {
 
 function Why() {
   const stats = [
-    { v: 240, s: "+", l: "Projects Shipped" },
-    { v: 98, s: "%", l: "Client Retention" },
-    { v: 42, s: "M+", l: "Users Impacted" },
-    { v: 15, s: "×", l: "Avg ROI" },
+    { v: 48, s: "+", l: "Projects Shipped" },
+    { v: 96, s: "%", l: "Client Retention" },
+    { v: 12, s: "+", l: "Countries Served" },
+    { v: 5, s: "×", l: "Avg ROI" },
   ];
   return (
     <section id="why" className="relative py-32 noise">
