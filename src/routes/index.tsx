@@ -404,7 +404,7 @@ function Hero() {
                 </div>
                 <div className="col-span-3 space-y-3">
                   <div className="grid grid-cols-3 gap-3">
-                    {[{ l: "Revenue", v: "$248K", d: "+24%" }, { l: "Active Users", v: "18.4K", d: "+12%" }, { l: "Automations", v: "1.2M", d: "+38%" }].map((k) => (
+                    {[{ l: "Revenue", v: "$62K", d: "+18%" }, { l: "Active Users", v: "2.4K", d: "+9%" }, { l: "Automations", v: "184", d: "+22%" }].map((k) => (
                       <div key={k.l} className="rounded-xl glass p-4 text-left">
                         <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{k.l}</div>
                         <div className="mt-1 font-display text-2xl font-bold">{k.v}</div>
