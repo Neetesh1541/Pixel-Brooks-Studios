@@ -482,16 +482,24 @@ function Services() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
             >
-              <TiltCard className="group relative h-full overflow-hidden rounded-3xl glass p-7 transition-all hover:glass-strong hover:glow-brand">
+              <TiltCard className="group relative h-full overflow-hidden rounded-3xl glass transition-all hover:glass-strong hover:glow-brand">
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    loading="lazy"
+                    width={1024}
+                    height={768}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                </div>
                 <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity group-hover:opacity-60"
                   style={{ background: "var(--gradient-brand)" }} />
-                <div className="relative">
-                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl glass-strong text-2xl text-gradient">
-                    {s.icon}
-                  </div>
+                <div className="relative p-7">
                   <h3 className="font-display text-xl font-semibold">{s.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-                  <div className="mt-6 flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground">
+                  <div className="mt-5 flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground transition-colors group-hover:text-foreground">
                     Explore <span className="transition-transform group-hover:translate-x-1">→</span>
                   </div>
                 </div>
