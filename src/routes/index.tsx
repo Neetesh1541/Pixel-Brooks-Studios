@@ -950,29 +950,134 @@ function BackToTop() {
   );
 }
 
+type ChatMsg = { role: "user" | "assistant"; content: string };
+
 function ChatWidget() {
   const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<ChatMsg[]>([
+    { role: "assistant", content: "Hey 👋 I'm NexGen AI. Tell me about your project — what are you building and when do you need to launch?" },
+  ]);
+  const [loading, setLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, loading]);
+
+  async function send() {
+    const text = input.trim();
+    if (!text || loading) return;
+    const next: ChatMsg[] = [...messages, { role: "user", content: text }];
+    setMessages(next);
+    setInput("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: next }),
+      });
+      if (!res.ok || !res.body) throw new Error("network");
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+      let assistant = "";
+      setMessages((m) => [...m, { role: "assistant", content: "" }]);
+      let buf = "";
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buf += value;
+        const lines = buf.split("\n");
+        buf = lines.pop() ?? "";
+        for (const line of lines) {
+          if (!line.startsWith("data:")) continue;
+          const data = line.slice(5).trim();
+          if (!data || data === "[DONE]") continue;
+          try {
+            const j = JSON.parse(data);
+            const delta = j.choices?.[0]?.delta?.content ?? "";
+            if (delta) {
+              assistant += delta;
+              setMessages((m) => {
+                const copy = m.slice();
+                copy[copy.length - 1] = { role: "assistant", content: assistant };
+                return copy;
+              });
+            }
+          } catch { /* ignore */ }
+        }
+      }
+      if (!assistant) {
+        setMessages((m) => {
+          const copy = m.slice();
+          copy[copy.length - 1] = { role: "assistant", content: "Sorry — I couldn't reach the AI just now. Try again in a moment, or email hello@nexgen.studio." };
+          return copy;
+        });
+      }
+    } catch {
+      setMessages((m) => [...m, { role: "assistant", content: "Connection issue. Please try again, or email hello@nexgen.studio." }]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="fixed bottom-6 left-6 z-40">
-      {open && (
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          className="mb-3 w-72 rounded-3xl glass-strong p-4"
-        >
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full" style={{ background: "var(--gradient-brand)" }}>✦</div>
-            <div>
-              <div className="text-sm font-semibold">NexGen AI</div>
-              <div className="text-[10px] text-emerald-400">● Online</div>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="mb-3 w-[340px] rounded-3xl glass-strong p-4"
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full text-white" style={{ background: "var(--gradient-brand)" }}>✦</div>
+              <div>
+                <div className="text-sm font-semibold">NexGen AI</div>
+                <div className="text-[10px] text-emerald-400">● Online</div>
+              </div>
             </div>
-          </div>
-          <div className="mt-3 rounded-xl bg-white/5 p-3 text-xs text-muted-foreground">
-            Hey 👋 — tell me about your project and I'll route you to the right expert.
-          </div>
-          <input placeholder="Type a message…" className="mt-3 w-full rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs outline-none" />
-        </motion.div>
-      )}
+            <div ref={scrollRef} className="mt-3 max-h-72 space-y-2 overflow-y-auto pr-1">
+              {messages.map((m, i) => (
+                <div
+                  key={i}
+                  className={`rounded-2xl px-3 py-2 text-xs leading-relaxed ${
+                    m.role === "user"
+                      ? "ml-6 text-white"
+                      : "mr-6 bg-white/5 text-foreground/90"
+                  }`}
+                  style={m.role === "user" ? { background: "var(--gradient-brand)" } : undefined}
+                >
+                  {m.content || (loading && i === messages.length - 1 ? "…" : "")}
+                </div>
+              ))}
+              {loading && messages[messages.length - 1]?.role === "user" && (
+                <div className="mr-6 rounded-2xl bg-white/5 px-3 py-2 text-xs text-muted-foreground">Thinking…</div>
+              )}
+            </div>
+            <form
+              onSubmit={(e) => { e.preventDefault(); send(); }}
+              className="mt-3 flex items-center gap-2"
+            >
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type a message…"
+                className="flex-1 rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs outline-none focus:border-primary"
+              />
+              <button
+                type="submit"
+                disabled={loading || !input.trim()}
+                className="rounded-full px-3 py-2 text-xs text-white disabled:opacity-50"
+                style={{ background: "var(--gradient-brand)" }}
+              >
+                Send
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <button
         onClick={() => setOpen((o) => !o)}
         data-cursor="hover"
