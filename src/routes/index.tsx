@@ -186,7 +186,7 @@ function Nav() {
     >
       <nav className="flex items-center justify-between px-3 py-2.5">
         <a href="#top" className="flex items-center gap-2 pl-2" data-cursor="hover">
-          <img src={logoAsset.url} alt="NexGen" className="h-8 w-8 object-contain" />
+          <img src={logoUrl} alt="NexGen" className="h-8 w-8 object-contain" />
           <span className="font-display text-lg font-bold tracking-tight">NexGen</span>
         </a>
         <ul className="hidden items-center gap-1 md:flex">
@@ -879,7 +879,7 @@ function Footer() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3">
-                <img src={logoAsset.url} alt="NexGen" className="h-10 w-10" />
+                <img src={logoUrl} alt="NexGen" className="h-10 w-10" />
                 <span className="font-display text-2xl font-bold">NexGen</span>
               </div>
               <p className="mt-4 max-w-sm text-sm text-muted-foreground">
