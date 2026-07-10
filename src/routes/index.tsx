@@ -1,6 +1,16 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import logoAsset from "@/assets/nexgen-logo.asset.json";
+import logoUrl from "@/assets/nexgen-logo.png";
+import svcWeb from "@/assets/svc-web.jpg";
+import svcUiux from "@/assets/svc-uiux.jpg";
+import svcBrand from "@/assets/svc-brand.jpg";
+import svcAi from "@/assets/svc-ai.jpg";
+import svcSaas from "@/assets/svc-saas.jpg";
+import svcMobile from "@/assets/svc-mobile.jpg";
+import projLumen from "@/assets/proj-lumen.jpg";
+import projOrbit from "@/assets/proj-orbit.jpg";
+import projNova from "@/assets/proj-nova.jpg";
+import projHelix from "@/assets/proj-helix.jpg";
 import { createFileRoute } from "@tanstack/react-router";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { CustomCursor } from "@/components/CustomCursor";
