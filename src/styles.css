@@ -30,9 +30,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-neon-pink: var(--neon-pink);
-  --color-neon-purple: var(--neon-purple);
-  --color-neon-blue: var(--neon-blue);
+  --color-brand-a: var(--brand-a);
+  --color-brand-mid: var(--brand-mid);
+  --color-brand-b: var(--brand-b);
   --font-display: "Space Grotesk", "Inter", sans-serif;
   --font-sans: "Inter", sans-serif;
 }
