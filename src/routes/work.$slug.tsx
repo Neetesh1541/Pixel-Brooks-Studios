@@ -161,7 +161,7 @@ function ProjectPage() {
               <h2 className="font-display text-2xl font-semibold">Overview</h2>
               <p className="mt-4 text-muted-foreground leading-relaxed">{d.overview}</p>
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-                {d.metrics.map((m) => (
+                {d.metrics.map((m: { label: string; value: string }) => (
                   <div key={m.label} className="rounded-2xl glass-strong p-5">
                     <div className="font-display text-3xl font-bold text-gradient">{m.value}</div>
                     <div className="mt-1 text-[11px] uppercase tracking-widest text-muted-foreground">{m.label}</div>
@@ -181,7 +181,7 @@ function ProjectPage() {
               <div className="rounded-3xl glass p-6">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">Services</div>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {d.services.map((s) => (
+                  {d.services.map((s: string) => (
                     <span key={s} className="rounded-full glass-strong px-3 py-1 text-[11px]">{s}</span>
                   ))}
                 </div>
@@ -190,7 +190,7 @@ function ProjectPage() {
           </div>
 
           <div className="mt-16 grid grid-cols-1 gap-6">
-            {d.gallery.map((src, i) => (
+            {d.gallery.map((src: string, i: number) => (
               <motion.div key={src} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: i * 0.1 }}
                 className="overflow-hidden rounded-3xl glass p-3">
