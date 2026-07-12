@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import logoUrl from "@/assets/nexgen-mark.png";
+import logoUrl from "@/assets/pixelbrook-mark.png";
 import svcWeb from "@/assets/svc-web.jpg";
 import svcUiux from "@/assets/svc-uiux.jpg";
 import svcBrand from "@/assets/svc-brand.jpg";
@@ -12,6 +12,16 @@ import projLumen from "@/assets/proj-lumen.jpg";
 import projOrbit from "@/assets/proj-orbit.jpg";
 import projNova from "@/assets/proj-nova.jpg";
 import projHelix from "@/assets/proj-helix.jpg";
+
+// =================== BRAND CONSTANTS ===================
+export const BRAND = {
+  name: "Pixel Brook",
+  tagline: "Design · Develop · Automate",
+  email: "pixelbrookstudio@gmail.com",
+  phones: ["+91 82188 28273", "+91 80770 67635"],
+  instagram: "https://www.instagram.com/pixelbrook.store?igsh=dXJiNGl4aHJjZG9u",
+  linkedin: "https://www.linkedin.com/company/pixelbrook-studio/",
+};
 
 // =================== SHARED ===================
 
@@ -52,7 +62,7 @@ export function SectionHeading({ eyebrow, title, subtitle }: { eyebrow: string; 
   );
 }
 
-export function MagneticButton({ children, variant = "primary", href = "#", to, ...rest }: { children: ReactNode; variant?: "primary" | "ghost"; href?: string; to?: string }) {
+export function MagneticButton({ children, variant = "primary", href, to, target, rel }: { children: ReactNode; variant?: "primary" | "ghost"; href?: string; to?: string; target?: string; rel?: string }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -76,7 +86,7 @@ export function MagneticButton({ children, variant = "primary", href = "#", to, 
   );
   if (to) {
     return (
-      <Link to={to} data-cursor="hover" className={`${base} ${styles}`} {...rest}>
+      <Link to={to} data-cursor="hover" className={`${base} ${styles}`}>
         {inner}
       </Link>
     );
@@ -84,13 +94,14 @@ export function MagneticButton({ children, variant = "primary", href = "#", to, 
   return (
     <motion.a
       ref={ref}
-      href={href}
+      href={href ?? "#"}
+      target={target}
+      rel={rel}
       style={{ x: sx, y: sy }}
       onMouseMove={onMove}
       onMouseLeave={reset}
       data-cursor="hover"
       className={`${base} ${styles}`}
-      {...rest}
     >
       {inner}
     </motion.a>
@@ -143,25 +154,24 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 
 // =================== THEME ===================
 
-export type ThemeId = "aurora" | "light" | "cyber" | "sunset";
+export type ThemeId = "light" | "dark" | "brand";
 const THEMES: { id: ThemeId; label: string; swatch: string }[] = [
-  { id: "aurora", label: "Aurora", swatch: "linear-gradient(135deg,#ff4fbf,#7a3bff,#3b9dff)" },
-  { id: "light", label: "Light", swatch: "linear-gradient(135deg,#f5f5f7,#dcdce6)" },
-  { id: "cyber", label: "Cyber", swatch: "linear-gradient(135deg,#00ffa3,#00d4ff)" },
-  { id: "sunset", label: "Sunset", swatch: "linear-gradient(135deg,#ff8a00,#ff2e63)" },
+  { id: "light", label: "Light", swatch: "linear-gradient(135deg,#f5f7fb,#dfe7f5)" },
+  { id: "dark", label: "Dark", swatch: "linear-gradient(135deg,#1a1f2e,#0b1220)" },
+  { id: "brand", label: "Brand", swatch: "linear-gradient(135deg,#3fb6d9,#e97b3a 55%,#1a4a8a)" },
 ];
 
 export function useTheme() {
-  const [theme, setTheme] = useState<ThemeId>("aurora");
+  const [theme, setTheme] = useState<ThemeId>("light");
   useEffect(() => {
-    const saved = (typeof window !== "undefined" && (localStorage.getItem("nexgen-theme") as ThemeId)) || "aurora";
+    const saved = (typeof window !== "undefined" && (localStorage.getItem("pb-theme") as ThemeId)) || "light";
     setTheme(saved);
     document.documentElement.dataset.theme = saved;
   }, []);
   const change = (t: ThemeId) => {
     setTheme(t);
     document.documentElement.dataset.theme = t;
-    try { localStorage.setItem("nexgen-theme", t); } catch {}
+    try { localStorage.setItem("pb-theme", t); } catch { /* ignore */ }
   };
   return { theme, setTheme: change };
 }
@@ -185,7 +195,7 @@ function ThemeSwitcher() {
             <button
               key={t.id}
               onClick={() => { setTheme(t.id); setOpen(false); }}
-              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-xs transition-colors ${theme === t.id ? "bg-white/10" : "hover:bg-white/5"}`}
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-xs transition-colors ${theme === t.id ? "bg-foreground/10" : "hover:bg-foreground/5"}`}
             >
               <span className="h-4 w-4 rounded-full" style={{ background: t.swatch }} />
               <span className="text-foreground">{t.label}</span>
@@ -226,8 +236,8 @@ export function Nav() {
     >
       <nav className="flex items-center justify-between px-3 py-2.5">
         <Link to="/" className="flex items-center gap-2 pl-2" data-cursor="hover">
-          <img src={logoUrl} alt="NexGen" className="h-8 w-8 object-contain" />
-          <span className="font-display text-lg font-bold tracking-tight">NexGen</span>
+          <img src={logoUrl} alt="Pixel Brook" className="h-8 w-8 object-contain" />
+          <span className="font-display text-lg font-bold tracking-tight">Pixel Brook</span>
         </Link>
         <ul className="hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((l) => (
@@ -235,8 +245,8 @@ export function Nav() {
               <Link
                 to={l.to}
                 data-cursor="hover"
-                activeProps={{ className: "text-foreground bg-white/10" }}
-                className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground hover:bg-white/5"
+                activeProps={{ className: "text-foreground bg-foreground/10" }}
+                className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5"
               >
                 {l.label}
               </Link>
@@ -261,7 +271,7 @@ export function Nav() {
         <div className="md:hidden rounded-2xl glass-strong m-2 p-3">
           {NAV_LINKS.map((l) => (
             <Link key={l.to} to={l.to} onClick={() => setMobileOpen(false)}
-              className="block rounded-xl px-4 py-2.5 text-sm text-muted-foreground hover:bg-white/5 hover:text-foreground">
+              className="block rounded-xl px-4 py-2.5 text-sm text-muted-foreground hover:bg-foreground/5 hover:text-foreground">
               {l.label}
             </Link>
           ))}
@@ -317,12 +327,11 @@ function GridBg() {
 
 export function Hero() {
   const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 800], [0, 200]);
-  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const heroY = useTransform(scrollY, [0, 800], [0, 120]);
   return (
     <section className="relative min-h-dvh overflow-hidden pt-32 noise">
       <AuroraBg />
-      <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 mx-auto max-w-7xl px-6 pt-16 text-center">
+      <motion.div style={{ y: heroY }} className="relative z-10 mx-auto max-w-7xl px-6 pt-16 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
           className="mx-auto inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs uppercase tracking-[0.3em] text-muted-foreground"
@@ -368,12 +377,12 @@ export function Hero() {
           className="mx-auto mt-20 max-w-5xl"
         >
           <div className="relative rounded-3xl glass-strong p-3 glow-brand">
-            <div className="rounded-2xl bg-gradient-to-br from-black/40 to-black/10 p-6">
+            <div className="rounded-2xl surface-elev p-6">
               <div className="mb-4 flex items-center gap-1.5">
                 <span className="h-3 w-3 rounded-full bg-red-400/70" />
                 <span className="h-3 w-3 rounded-full bg-yellow-400/70" />
                 <span className="h-3 w-3 rounded-full bg-green-400/70" />
-                <span className="ml-3 text-[10px] text-muted-foreground">nexgen.studio/dashboard</span>
+                <span className="ml-3 text-[10px] text-muted-foreground">pixelbrook.studio/dashboard</span>
               </div>
               <div className="grid grid-cols-4 gap-3">
                 <div className="col-span-1 space-y-3">
@@ -387,12 +396,12 @@ export function Hero() {
                       <div key={k.l} className="rounded-xl glass p-4 text-left">
                         <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{k.l}</div>
                         <div className="mt-1 font-display text-2xl font-bold">{k.v}</div>
-                        <div className="text-[10px] text-emerald-400">{k.d}</div>
+                        <div className="text-[10px] text-emerald-500">{k.d}</div>
                       </div>
                     ))}
                   </div>
                   <div className="h-40 rounded-xl glass p-4 relative overflow-hidden">
-                    <svg viewBox="0 0 400 120" className="h-full w-full">
+                    <svg viewBox="0 0 400 120" className="h-full w-full" preserveAspectRatio="none">
                       <defs>
                         <linearGradient id="ch" x1="0" x2="0" y1="0" y2="1">
                           <stop offset="0" stopColor="var(--brand-mid)" stopOpacity="0.6" />
@@ -416,7 +425,7 @@ export function Hero() {
 export function Marquee() {
   const items = ["Design", "Development", "Branding", "AI Automation", "SaaS", "SEO", "Mobile Apps", "Software", "Marketing"];
   return (
-    <div className="relative border-y border-white/5 py-8 overflow-hidden">
+    <div className="relative border-y border-border py-8 overflow-hidden">
       <div className="flex whitespace-nowrap animate-marquee">
         {[...items, ...items, ...items].map((t, i) => (
           <div key={i} className="mx-8 flex items-center gap-8 font-display text-4xl font-semibold text-muted-foreground/60">
@@ -485,10 +494,10 @@ export function Services({ intro = true }: { intro?: boolean }) {
 // =================== PORTFOLIO ===================
 
 export const projects = [
-  { title: "Lumen AI", tag: "SaaS · Platform", img: projLumen },
-  { title: "Orbit Finance", tag: "Fintech · Web", img: projOrbit },
-  { title: "Nova Studio", tag: "Brand · Identity", img: projNova },
-  { title: "Helix Health", tag: "Mobile · App", img: projHelix },
+  { slug: "lumen-ai", title: "Lumen AI", tag: "SaaS · Platform", img: projLumen },
+  { slug: "orbit-finance", title: "Orbit Finance", tag: "Fintech · Web", img: projOrbit },
+  { slug: "nova-studio", title: "Nova Studio", tag: "Brand · Identity", img: projNova },
+  { slug: "helix-health", title: "Helix Health", tag: "Mobile · App", img: projHelix },
 ];
 
 export function Portfolio({ intro = true }: { intro?: boolean }) {
@@ -526,7 +535,7 @@ export function Portfolio({ intro = true }: { intro?: boolean }) {
                     <p className="text-xs uppercase tracking-widest text-muted-foreground">{p.tag}</p>
                   </div>
                   <div className="flex gap-2">
-                    <a href="#" data-cursor="hover" className="rounded-full glass px-4 py-2 text-xs hover:glow-brand transition-all">Case Study</a>
+                    <Link to="/work/$slug" params={{ slug: p.slug }} data-cursor="hover" className="rounded-full glass px-4 py-2 text-xs hover:glow-brand transition-all">Live Site →</Link>
                   </div>
                 </div>
               </TiltCard>
@@ -561,7 +570,7 @@ export function Process({ intro = true }: { intro?: boolean }) {
           />
         )}
         <div className="mt-20 relative">
-          <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/20 to-transparent md:block" />
+          <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-border to-transparent md:block" />
           <div className="space-y-10">
             {steps.map((s, i) => (
               <motion.div key={s.n}
@@ -591,7 +600,7 @@ export function Process({ intro = true }: { intro?: boolean }) {
   );
 }
 
-// =================== WHY / ABOUT stats ===================
+// =================== WHY ===================
 
 export function Why() {
   const stats = [
@@ -605,7 +614,7 @@ export function Why() {
       <GridBg />
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <SectionHeading
-          eyebrow="Why NexGen"
+          eyebrow="Why Pixel Brook"
           title={<>Numbers that <span className="text-gradient">compound</span></>}
           subtitle="Not a factory. A small team of engineers, designers and strategists obsessed with outcomes."
         />
@@ -625,14 +634,14 @@ export function Why() {
         </div>
         <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="rounded-3xl glass p-8">
-            <h3 className="font-display text-xl font-semibold">NexGen vs Typical Agency</h3>
+            <h3 className="font-display text-xl font-semibold">Pixel Brook vs Typical Agency</h3>
             <div className="mt-6 space-y-3">
               {[["Ship velocity", 95, 45], ["Design craft", 98, 60], ["AI depth", 92, 30], ["Post-launch care", 90, 40]].map(([label, us, them]) => (
                 <div key={label as string}>
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{label as string}</span><span>{us}% vs {them}%</span>
                   </div>
-                  <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-white/10">
+                  <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-foreground/10">
                     <motion.div initial={{ width: 0 }} whileInView={{ width: `${us}%` }} viewport={{ once: true }}
                       transition={{ duration: 1.2, ease: "easeOut" }}
                       className="h-full rounded-full" style={{ background: "var(--gradient-brand)" }} />
@@ -664,7 +673,7 @@ export function Why() {
 // =================== TESTIMONIALS ===================
 
 const testimonials = [
-  { n: "Elena R.", r: "CEO, Lumen AI", q: "NexGen redefined what shipping fast and looking incredible means. Best partner we've hired." },
+  { n: "Elena R.", r: "CEO, Lumen AI", q: "Pixel Brook redefined what shipping fast and looking incredible means. Best partner we've hired." },
   { n: "Marcus V.", r: "Founder, Orbit", q: "Our conversions tripled within 30 days of launch. The craft is on a different level." },
   { n: "Priya S.", r: "Product Lead, Helix", q: "The design system they built is still setting the tone two years later. Timeless work." },
   { n: "Daniel K.", r: "CTO, Nova", q: "AI automations they built save us ~40 hours a week. Felt like magic." },
@@ -690,7 +699,7 @@ export function Testimonials() {
                   </div>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">"{t.q}"</p>
-                <div className="mt-4 text-xs text-yellow-400/90">★★★★★</div>
+                <div className="mt-4 text-xs text-amber-500">★★★★★</div>
               </div>
             ))}
           </div>
@@ -708,21 +717,21 @@ export function AboutContent() {
       <AuroraBg />
       <div className="relative z-10 mx-auto max-w-5xl px-6">
         <SectionHeading
-          eyebrow="About NexGen"
-          title={<>A small studio for <span className="text-gradient">ambitious founders</span></>}
+          eyebrow="About Pixel Brook"
+          title={<>A studio for <span className="text-gradient">ambitious founders</span></>}
           subtitle="We're engineers, designers and strategists who care about the last 5% — the polish that turns products into brands."
         />
         <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="rounded-3xl glass p-8">
             <h3 className="font-display text-xl font-semibold">Our story</h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              NexGen started in 2023 as a two-person collaboration between an engineer and a designer tired of shipping middling work at bigger agencies. Today we're a distributed team of six seniors partnering with founders across four continents.
+              Pixel Brook started as a small collaboration between engineers and designers tired of shipping middling work. Today we're a tight team of seniors partnering with founders across continents.
             </p>
           </div>
           <div className="rounded-3xl glass p-8">
             <h3 className="font-display text-xl font-semibold">How we work</h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              One senior on your project full-stack, weekly demos, transparent Linear boards, and a fixed scope with room to iterate. We treat every project like it's our own.
+              One senior on your project full-stack, weekly demos, transparent boards, and a fixed scope with room to iterate. We treat every project like it's our own.
             </p>
           </div>
         </div>
@@ -745,44 +754,60 @@ export function ContactForm() {
         />
         <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <form className="rounded-3xl glass p-8 space-y-5" onSubmit={(e) => e.preventDefault()}>
+            <form
+              className="rounded-3xl glass p-8 space-y-5"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const f = e.currentTarget;
+                const name = (f.elements.namedItem("name") as HTMLInputElement)?.value ?? "";
+                const email = (f.elements.namedItem("email") as HTMLInputElement)?.value ?? "";
+                const project = (f.elements.namedItem("project") as HTMLSelectElement)?.value ?? "";
+                const message = (f.elements.namedItem("message") as HTMLTextAreaElement)?.value ?? "";
+                const body = `Name: ${name}%0AEmail: ${email}%0AProject: ${project}%0A%0A${encodeURIComponent(message)}`;
+                window.location.href = `mailto:${BRAND.email}?subject=${encodeURIComponent("New project inquiry — " + project)}&body=${body}`;
+              }}
+            >
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="text-xs uppercase tracking-widest text-muted-foreground">Name</label>
-                  <input className="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm outline-none focus:border-primary transition-colors" placeholder="Your name" />
+                  <label htmlFor="name" className="text-xs uppercase tracking-widest text-muted-foreground">Name</label>
+                  <input id="name" name="name" required className="mt-2 w-full rounded-xl bg-foreground/5 border border-border px-4 py-3 text-sm outline-none focus:border-primary transition-colors" placeholder="Your name" />
                 </div>
                 <div>
-                  <label className="text-xs uppercase tracking-widest text-muted-foreground">Email</label>
-                  <input type="email" className="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm outline-none focus:border-primary transition-colors" placeholder="you@company.com" />
+                  <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground">Email</label>
+                  <input id="email" name="email" type="email" required className="mt-2 w-full rounded-xl bg-foreground/5 border border-border px-4 py-3 text-sm outline-none focus:border-primary transition-colors" placeholder="you@company.com" />
                 </div>
               </div>
               <div>
-                <label className="text-xs uppercase tracking-widest text-muted-foreground">Project</label>
-                <select className="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm outline-none focus:border-primary transition-colors">
+                <label htmlFor="project" className="text-xs uppercase tracking-widest text-muted-foreground">Project</label>
+                <select id="project" name="project" className="mt-2 w-full rounded-xl bg-foreground/5 border border-border px-4 py-3 text-sm outline-none focus:border-primary transition-colors">
                   {["Website", "SaaS Platform", "Branding", "AI Automation", "Mobile App", "Other"].map((o) => (
                     <option key={o} className="bg-background">{o}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="text-xs uppercase tracking-widest text-muted-foreground">Tell us more</label>
-                <textarea rows={5} className="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm outline-none focus:border-primary transition-colors resize-none" placeholder="What are you building?" />
+                <label htmlFor="message" className="text-xs uppercase tracking-widest text-muted-foreground">Tell us more</label>
+                <textarea id="message" name="message" rows={5} className="mt-2 w-full rounded-xl bg-foreground/5 border border-border px-4 py-3 text-sm outline-none focus:border-primary transition-colors resize-none" placeholder="What are you building?" />
               </div>
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="text-xs text-muted-foreground">We reply within 24 hours.</div>
-                <MagneticButton variant="primary" href="#">Send Message →</MagneticButton>
+                <button type="submit" className="rounded-full px-7 py-3.5 text-sm font-medium text-white glow-brand" style={{ background: "var(--gradient-brand)" }}>
+                  Send Message →
+                </button>
               </div>
             </form>
           </div>
           <div className="lg:col-span-2 space-y-4">
             {[
-              { l: "Email", v: "hello@nexgen.studio", i: "✉" },
-              { l: "WhatsApp", v: "+1 (555) 010-2026", i: "◈" },
-              { l: "Book a meeting", v: "cal.com/nexgen", i: "◉" },
-            ].map((c) => (
-              <a key={c.l} href="#" data-cursor="hover" className="block rounded-2xl glass p-5 hover:glass-strong hover:glow-brand transition-all">
+              { l: "Email", v: BRAND.email, href: `mailto:${BRAND.email}`, i: "✉" },
+              { l: "Phone", v: BRAND.phones[0], href: `tel:${BRAND.phones[0].replace(/\s/g, "")}`, i: "☎" },
+              { l: "Phone", v: BRAND.phones[1], href: `tel:${BRAND.phones[1].replace(/\s/g, "")}`, i: "☎" },
+              { l: "Instagram", v: "@pixelbrook.store", href: BRAND.instagram, i: "◈" },
+              { l: "LinkedIn", v: "Pixel Brook Studio", href: BRAND.linkedin, i: "in" },
+            ].map((c, idx) => (
+              <a key={idx} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel={c.href.startsWith("http") ? "noreferrer" : undefined} data-cursor="hover" className="block rounded-2xl glass p-5 hover:glass-strong hover:glow-brand transition-all">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl text-lg text-gradient glass-strong">{c.i}</div>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl text-lg text-gradient glass-strong font-bold">{c.i}</div>
                   <div>
                     <div className="text-xs uppercase tracking-widest text-muted-foreground">{c.l}</div>
                     <div className="text-sm font-medium">{c.v}</div>
@@ -807,12 +832,17 @@ export function Footer() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3">
-                <img src={logoUrl} alt="NexGen" className="h-10 w-10 object-contain" />
-                <span className="font-display text-2xl font-bold">NexGen</span>
+                <img src={logoUrl} alt="Pixel Brook" className="h-10 w-10 object-contain" />
+                <span className="font-display text-2xl font-bold">Pixel Brook</span>
               </div>
               <p className="mt-4 max-w-sm text-sm text-muted-foreground">
                 Design. Develop. Automate. We build digital experiences that define the future.
               </p>
+              <div className="mt-5 space-y-1.5 text-sm text-muted-foreground">
+                <div><a href={`mailto:${BRAND.email}`} className="hover:text-foreground">{BRAND.email}</a></div>
+                <div><a href={`tel:${BRAND.phones[0].replace(/\s/g, "")}`} className="hover:text-foreground">{BRAND.phones[0]}</a></div>
+                <div><a href={`tel:${BRAND.phones[1].replace(/\s/g, "")}`} className="hover:text-foreground">{BRAND.phones[1]}</a></div>
+              </div>
             </div>
             <div>
               <div className="text-xs uppercase tracking-widest text-muted-foreground">Company</div>
@@ -825,20 +855,15 @@ export function Footer() {
             <div>
               <div className="text-xs uppercase tracking-widest text-muted-foreground">Connect</div>
               <ul className="mt-4 space-y-2 text-sm">
-                {["Twitter / X", "Instagram", "LinkedIn", "Dribbble", "GitHub"].map((l) => (
-                  <li key={l}><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">{l}</a></li>
-                ))}
+                <li><a href={BRAND.instagram} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">Instagram</a></li>
+                <li><a href={BRAND.linkedin} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">LinkedIn</a></li>
+                <li><a href={`mailto:${BRAND.email}`} className="text-muted-foreground hover:text-foreground transition-colors">Email</a></li>
               </ul>
             </div>
           </div>
-          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-muted-foreground md:flex-row">
-            <div>© {new Date().getFullYear()} NexGen. All rights reserved.</div>
-            <div className="flex items-center gap-1.5">
-              Made with <span className="text-rose-400">❤</span> by{" "}
-              <a href="https://neetesh.tech" target="_blank" rel="noreferrer" className="group relative font-semibold">
-                <span className="relative inline-block text-gradient transition-transform duration-300 group-hover:scale-110">Neetesh Sharma</span>
-              </a>
-            </div>
+          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-sm text-muted-foreground md:flex-row">
+            <div>© {new Date().getFullYear()} Pixel Brook. All rights reserved.</div>
+            <div>Made with <span className="text-rose-500">♥</span> by the Pixel Brook team</div>
           </div>
         </div>
       </div>
@@ -863,13 +888,28 @@ function BackToTop() {
   );
 }
 
+// Chatbot icon (SVG) — real chatbot look
+function ChatBotIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden>
+      <rect x="3.5" y="6" width="17" height="12" rx="4" fill="currentColor" opacity="0.15" />
+      <rect x="3.5" y="6" width="17" height="12" rx="4" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="9" cy="12" r="1.4" fill="currentColor" />
+      <circle cx="15" cy="12" r="1.4" fill="currentColor" />
+      <path d="M12 3v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="12" cy="2.5" r="1.1" fill="currentColor" />
+      <path d="M8 18l-1.5 2.5M16 18l1.5 2.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 type ChatMsg = { role: "user" | "assistant"; content: string };
 
 function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMsg[]>([
-    { role: "assistant", content: "Hey 👋 I'm NexGen AI. Tell me about your project — what are you building and when do you need to launch?" },
+    { role: "assistant", content: "Hi there 👋 I'm Pixel Brook AI. Tell me about your project — what are you building and when do you need to launch?" },
   ]);
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -885,16 +925,21 @@ function ChatWidget() {
     setMessages(next);
     setInput("");
     setLoading(true);
+    // placeholder assistant slot
+    setMessages((m) => [...m, { role: "assistant", content: "" }]);
+    let assistant = "";
+    let received = false;
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: next }),
       });
-      if (!res.ok || !res.body) throw new Error("network");
+      if (!res.ok || !res.body) {
+        throw new Error(`HTTP ${res.status}`);
+      }
       const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
-      let assistant = "";
-      setMessages((m) => [...m, { role: "assistant", content: "" }]);
       let buf = "";
       while (true) {
         const { value, done } = await reader.read();
@@ -903,13 +948,15 @@ function ChatWidget() {
         const lines = buf.split("\n");
         buf = lines.pop() ?? "";
         for (const line of lines) {
-          if (!line.startsWith("data:")) continue;
-          const data = line.slice(5).trim();
+          const trimmed = line.trim();
+          if (!trimmed.startsWith("data:")) continue;
+          const data = trimmed.slice(5).trim();
           if (!data || data === "[DONE]") continue;
           try {
             const j = JSON.parse(data);
-            const delta = j.choices?.[0]?.delta?.content ?? "";
+            const delta = j.choices?.[0]?.delta?.content ?? j.choices?.[0]?.message?.content ?? "";
             if (delta) {
+              received = true;
               assistant += delta;
               setMessages((m) => {
                 const copy = m.slice();
@@ -917,18 +964,29 @@ function ChatWidget() {
                 return copy;
               });
             }
-          } catch { /* ignore */ }
+          } catch { /* ignore malformed lines */ }
         }
       }
-      if (!assistant) {
+      if (!received) {
         setMessages((m) => {
           const copy = m.slice();
-          copy[copy.length - 1] = { role: "assistant", content: "Sorry — I couldn't reach the AI just now. Please try again, or email hello@nexgen.studio." };
+          copy[copy.length - 1] = {
+            role: "assistant",
+            content: `Sorry — I couldn't reach the AI. Please email ${BRAND.email} or call ${BRAND.phones[0]}.`,
+          };
           return copy;
         });
       }
-    } catch {
-      setMessages((m) => [...m, { role: "assistant", content: "Connection issue. Please try again, or email hello@nexgen.studio." }]);
+    } catch (err) {
+      console.error("chat error", err);
+      setMessages((m) => {
+        const copy = m.slice();
+        copy[copy.length - 1] = {
+          role: "assistant",
+          content: `Connection issue. Please email ${BRAND.email} or call ${BRAND.phones[0]}.`,
+        };
+        return copy;
+      });
     } finally {
       setLoading(false);
     }
@@ -943,26 +1001,25 @@ function ChatWidget() {
             className="mb-3 w-[340px] rounded-3xl glass-strong p-4"
           >
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full text-white" style={{ background: "var(--gradient-brand)" }}>✦</div>
+              <div className="flex h-9 w-9 items-center justify-center rounded-full text-white" style={{ background: "var(--gradient-brand)" }}>
+                <ChatBotIcon className="h-5 w-5" />
+              </div>
               <div>
-                <div className="text-sm font-semibold">NexGen AI</div>
-                <div className="text-[10px] text-emerald-400">● Online</div>
+                <div className="text-sm font-semibold">Pixel Brook AI</div>
+                <div className="text-[10px] text-emerald-500">● Online</div>
               </div>
             </div>
             <div ref={scrollRef} className="mt-3 max-h-72 space-y-2 overflow-y-auto pr-1">
               {messages.map((m, i) => (
-                <div key={i} className={`rounded-2xl px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap ${m.role === "user" ? "ml-6 text-white" : "mr-6 bg-white/5 text-foreground/90"}`}
+                <div key={i} className={`rounded-2xl px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap ${m.role === "user" ? "ml-6 text-white" : "mr-6 bg-foreground/5 text-foreground/90"}`}
                   style={m.role === "user" ? { background: "var(--gradient-brand)" } : undefined}>
                   {m.content || (loading && i === messages.length - 1 ? "…" : "")}
                 </div>
               ))}
-              {loading && messages[messages.length - 1]?.role === "user" && (
-                <div className="mr-6 rounded-2xl bg-white/5 px-3 py-2 text-xs text-muted-foreground">Thinking…</div>
-              )}
             </div>
             <form onSubmit={(e) => { e.preventDefault(); send(); }} className="mt-3 flex items-center gap-2">
               <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Type a message…"
-                className="flex-1 rounded-full bg-white/5 border border-white/10 px-4 py-2 text-xs outline-none focus:border-primary" />
+                className="flex-1 rounded-full bg-foreground/5 border border-border px-4 py-2 text-xs outline-none focus:border-primary" />
               <button type="submit" disabled={loading || !input.trim()}
                 className="rounded-full px-3 py-2 text-xs text-white disabled:opacity-50" style={{ background: "var(--gradient-brand)" }}>
                 Send
@@ -971,13 +1028,65 @@ function ChatWidget() {
           </motion.div>
         )}
       </AnimatePresence>
-      <button onClick={() => setOpen((o) => !o)} aria-label="Chat"
+      <button onClick={() => setOpen((o) => !o)} aria-label="Open chat"
         className="flex h-14 w-14 items-center justify-center rounded-full text-white glow-brand"
         style={{ background: "var(--gradient-brand)" }}>
-        {open ? "×" : "✦"}
+        {open ? <span className="text-xl">×</span> : <ChatBotIcon className="h-7 w-7" />}
       </button>
     </div>
   );
+}
+
+// =================== VOICE WELCOME ===================
+
+function VoiceWelcome() {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!("speechSynthesis" in window)) return;
+    try {
+      if (sessionStorage.getItem("pb-welcomed") === "1") return;
+    } catch { /* ignore */ }
+
+    let cancelled = false;
+    const speak = () => {
+      if (cancelled) return;
+      const u = new SpeechSynthesisUtterance(
+        "Welcome to Pixel Brook. We design, develop and automate premium digital experiences. Explore our work, and let's build something great together.",
+      );
+      u.rate = 1;
+      u.pitch = 1;
+      u.volume = 0.9;
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = voices.find((v) => /en-(US|GB)/i.test(v.lang) && /female|zira|samantha|jenny|aria/i.test(v.name)) ||
+        voices.find((v) => /en/i.test(v.lang));
+      if (preferred) u.voice = preferred;
+      window.speechSynthesis.speak(u);
+      try { sessionStorage.setItem("pb-welcomed", "1"); } catch { /* ignore */ }
+    };
+
+    // Speech requires user gesture in most browsers — attach one-shot listener.
+    const trigger = () => {
+      speak();
+      window.removeEventListener("click", trigger);
+      window.removeEventListener("keydown", trigger);
+      window.removeEventListener("scroll", trigger);
+      window.removeEventListener("touchstart", trigger);
+    };
+    window.addEventListener("click", trigger, { once: true });
+    window.addEventListener("keydown", trigger, { once: true });
+    window.addEventListener("scroll", trigger, { once: true });
+    window.addEventListener("touchstart", trigger, { once: true });
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("click", trigger);
+      window.removeEventListener("keydown", trigger);
+      window.removeEventListener("scroll", trigger);
+      window.removeEventListener("touchstart", trigger);
+      try { window.speechSynthesis.cancel(); } catch { /* ignore */ }
+    };
+  }, []);
+  return null;
 }
 
 // =================== SITE SHELL ===================
@@ -990,6 +1099,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <Footer />
       <BackToTop />
       <ChatWidget />
+      <VoiceWelcome />
     </>
   );
 }

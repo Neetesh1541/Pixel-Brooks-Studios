@@ -5,11 +5,13 @@ export const Route = createFileRoute("/services")({
   component: ServicesPage,
   head: () => ({
     meta: [
-      { title: "Services — NexGen" },
-      { name: "description", content: "Websites, UI/UX, branding, AI automation, SaaS and mobile apps — built by a senior team." },
-      { property: "og:title", content: "Services — NexGen" },
+      { title: "Services — Pixel Brook" },
+      { name: "description", content: "Pixel Brook services: websites, UI/UX, branding, AI automation, SaaS and mobile apps — built by a senior team." },
+      { property: "og:title", content: "Services — Pixel Brook" },
       { property: "og:description", content: "Six disciplines, one obsession: craft that moves the metric." },
+      { property: "og:url", content: "/services" },
     ],
+    links: [{ rel: "canonical", href: "/services" }],
   }),
 });
 

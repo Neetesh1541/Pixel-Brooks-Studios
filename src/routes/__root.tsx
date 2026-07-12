@@ -55,20 +55,40 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "NexGen — Design. Develop. Automate." },
-      { name: "description", content: "NexGen builds premium websites, brands, AI automations and SaaS for founders shaping the next decade." },
-      { name: "author", content: "NexGen" },
-      { property: "og:title", content: "NexGen — Design. Develop. Automate." },
-      { property: "og:description", content: "Award-winning digital studio building the future of the web with premium design, engineering and AI automation." },
+      { title: "Pixel Brook — Digital Agency for Founders" },
+      { name: "description", content: "Pixel Brook is a premium digital agency building award-winning websites, brands, SaaS platforms, mobile apps and AI automations." },
+      { name: "author", content: "Pixel Brook" },
+      { property: "og:site_name", content: "Pixel Brook" },
+      { property: "og:title", content: "Pixel Brook — Digital Agency for Founders" },
+      { property: "og:description", content: "Premium websites, brands, SaaS and AI automations by a small senior team." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#1a4a8a" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/pixelbrook-favicon.png" },
+      { rel: "apple-touch-icon", href: "/pixelbrook-favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Pixel Brook",
+          alternateName: "Pixel Brook Studio",
+          email: "pixelbrookstudio@gmail.com",
+          telephone: ["+91-82188-28273", "+91-80770-67635"],
+          sameAs: [
+            "https://www.instagram.com/pixelbrook.store",
+            "https://www.linkedin.com/company/pixelbrook-studio/",
+          ],
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -79,8 +99,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <head><HeadContent /></head>
+    <html lang="en" data-theme="light" suppressHydrationWarning>
+      <head>
+        <HeadContent />
+        {/* Set theme before hydration to avoid FOUC / mismatch */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('pb-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`,
+          }}
+        />
+      </head>
       <body>{children}<Scripts /></body>
     </html>
   );

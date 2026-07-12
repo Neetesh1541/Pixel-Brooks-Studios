@@ -5,11 +5,13 @@ export const Route = createFileRoute("/process")({
   component: ProcessPage,
   head: () => ({
     meta: [
-      { title: "Process — NexGen" },
-      { name: "description", content: "How we take products from idea to launch in weeks: discover, research, design, develop, launch, grow." },
-      { property: "og:title", content: "Process — NexGen" },
+      { title: "Process — Pixel Brook" },
+      { name: "description", content: "How Pixel Brook takes products from idea to launch in weeks: discover, research, design, develop, launch, grow." },
+      { property: "og:title", content: "Process — Pixel Brook" },
       { property: "og:description", content: "A six-step process built for founders who ship." },
+      { property: "og:url", content: "/process" },
     ],
+    links: [{ rel: "canonical", href: "/process" }],
   }),
 });
 
