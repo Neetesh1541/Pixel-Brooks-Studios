@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
       { title: "Pixel Brook — Design. Develop. Automate." },
       { name: "description", content: "Pixel Brook is a premium digital agency building websites, brands, SaaS platforms, mobile apps and AI automations for founders shaping the next decade." },
       { property: "og:title", content: "Pixel Brook — Design. Develop. Automate." },
-      { property: "og:description", content: "Premium websites, brands, SaaS and AI automations by a small senior team." },
+      { property: "og:description", content: "Pixel Brook is a premium digital agency building websites, brands, SaaS platforms, mobile apps and AI automations for founders shaping the next decade." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
