@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoUrl from "@/assets/nexgen-logo.png";
+import logoUrl from "@/assets/pixelbrook-mark.png";
 
 export function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [progress, setProgress] = useState(0);
@@ -40,10 +40,10 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
             className="relative z-10 flex flex-col items-center"
           >
             <div className="relative">
-              <div className="absolute inset-0 rounded-full animate-pulse-ring border border-white/30" />
-              <div className="absolute inset-0 rounded-full animate-pulse-ring border border-white/20" style={{ animationDelay: "0.6s" }} />
+              <div className="absolute inset-0 rounded-full animate-pulse-ring border border-foreground/20" />
+              <div className="absolute inset-0 rounded-full animate-pulse-ring border border-foreground/10" style={{ animationDelay: "0.6s" }} />
               <div className="relative h-32 w-32 rounded-3xl glass-strong flex items-center justify-center glow-brand">
-                <img src={logoUrl} alt="NexGen" className="h-24 w-24 object-contain" />
+                <img src={logoUrl} alt="Pixel Brook" className="h-24 w-24 object-contain" />
               </div>
             </div>
 
@@ -53,7 +53,7 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="mt-8 text-4xl font-bold tracking-tight text-gradient font-display"
             >
-              NexGen
+              Pixel Brook
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -64,7 +64,7 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
               Design · Develop · Automate
             </motion.p>
 
-            <div className="mt-10 h-[2px] w-64 overflow-hidden rounded-full bg-white/10">
+            <div className="mt-10 h-[2px] w-64 overflow-hidden rounded-full bg-foreground/10">
               <motion.div
                 className="h-full rounded-full"
                 style={{ width: `${progress}%`, background: "var(--gradient-brand)" }}
