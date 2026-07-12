@@ -5,11 +5,13 @@ export const Route = createFileRoute("/work")({
   component: WorkPage,
   head: () => ({
     meta: [
-      { title: "Work — NexGen" },
-      { name: "description", content: "Selected projects: SaaS platforms, fintech, brand systems and mobile apps built with obsessive craft." },
-      { property: "og:title", content: "Work — NexGen" },
-      { property: "og:description", content: "A glimpse into what we ship — bold identities and category-defining products." },
+      { title: "Work — Pixel Brook Case Studies" },
+      { name: "description", content: "Selected Pixel Brook projects: SaaS platforms, fintech, brand systems and mobile apps built with obsessive craft." },
+      { property: "og:title", content: "Work — Pixel Brook" },
+      { property: "og:description", content: "Projects shaping tomorrow — bold identities and category-defining products." },
+      { property: "og:url", content: "/work" },
     ],
+    links: [{ rel: "canonical", href: "/work" }],
   }),
 });
 
