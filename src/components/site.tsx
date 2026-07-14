@@ -362,12 +362,27 @@ export function Nav() {
     window.addEventListener("scroll", h);
     return () => window.removeEventListener("scroll", h);
   }, []);
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onResize = () => {
+      if (window.innerWidth >= 768) setMobileOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [mobileOpen]);
   return (
     <motion.header
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed left-1/2 top-4 z-50 -translate-x-1/2 rounded-full transition-all duration-500 ${scrolled ? "glass-strong" : "glass"}`}
+      className={`fixed left-1/2 top-4 z-50 -translate-x-1/2 transition-all duration-300 ${mobileOpen ? "rounded-[28px]" : "rounded-full"} ${scrolled ? "glass-strong" : "glass"}`}
       style={{ width: "min(96vw, 1040px)" }}
     >
       <nav className="flex items-center justify-between px-3 py-2.5">
@@ -1974,20 +1989,61 @@ function VoiceWelcome() {
     }
 
     let cancelled = false;
+
+    // Chrome/Android often return an empty voice list on the very first
+    // getVoices() call of a page — warm it up early (no gesture needed for
+    // this part) so a voice is actually available by the time we speak.
+    let cachedVoices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
+    const onVoicesChanged = () => {
+      cachedVoices = window.speechSynthesis.getVoices();
+    };
+    window.speechSynthesis.addEventListener?.("voiceschanged", onVoicesChanged);
+
+    const pickVoice = () => {
+      const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
+      return (
+        voices.find(
+          (v) => /en-(US|GB)/i.test(v.lang) && /female|zira|samantha|jenny|aria/i.test(v.name),
+        ) ||
+        voices.find((v) => /en/i.test(v.lang)) ||
+        voices[0]
+      );
+    };
+
     const speak = () => {
       if (cancelled) return;
+      // Clear any stuck/paused queue from a previous page load in this tab.
+      try {
+        window.speechSynthesis.cancel();
+      } catch {
+        /* ignore */
+      }
       const u = new SpeechSynthesisUtterance(
         "Welcome to Pixel Brook. We design, develop and automate premium digital experiences. Explore our work, and let's build something great together.",
       );
       u.rate = 1;
       u.pitch = 1;
       u.volume = 0.9;
-      const voices = window.speechSynthesis.getVoices();
-      const preferred =
-        voices.find(
-          (v) => /en-(US|GB)/i.test(v.lang) && /female|zira|samantha|jenny|aria/i.test(v.name),
-        ) || voices.find((v) => /en/i.test(v.lang));
+      const preferred = pickVoice();
       if (preferred) u.voice = preferred;
+
+      let started = false;
+      u.onstart = () => {
+        started = true;
+      };
+      u.onerror = () => {
+        // Some engines fail silently the first time — one retry is usually
+        // enough once voices have actually finished loading.
+        if (!started && !cancelled) {
+          setTimeout(() => {
+            try {
+              window.speechSynthesis.speak(u);
+            } catch {
+              /* ignore */
+            }
+          }, 300);
+        }
+      };
       window.speechSynthesis.speak(u);
       try {
         sessionStorage.setItem("pb-welcomed", "1");
@@ -1996,25 +2052,25 @@ function VoiceWelcome() {
       }
     };
 
-    // Speech requires user gesture in most browsers — attach one-shot listener.
+    // Speech requires a real user gesture — "scroll" does NOT count as one
+    // in Chrome/Safari's activation model, so it's deliberately excluded
+    // here (using it previously silently burned the one-shot trigger).
     const trigger = () => {
       speak();
       window.removeEventListener("click", trigger);
       window.removeEventListener("keydown", trigger);
-      window.removeEventListener("scroll", trigger);
-      window.removeEventListener("touchstart", trigger);
+      window.removeEventListener("touchend", trigger);
     };
     window.addEventListener("click", trigger, { once: true });
     window.addEventListener("keydown", trigger, { once: true });
-    window.addEventListener("scroll", trigger, { once: true });
-    window.addEventListener("touchstart", trigger, { once: true });
+    window.addEventListener("touchend", trigger, { once: true });
 
     return () => {
       cancelled = true;
       window.removeEventListener("click", trigger);
       window.removeEventListener("keydown", trigger);
-      window.removeEventListener("scroll", trigger);
-      window.removeEventListener("touchstart", trigger);
+      window.removeEventListener("touchend", trigger);
+      window.speechSynthesis.removeEventListener?.("voiceschanged", onVoicesChanged);
       try {
         window.speechSynthesis.cancel();
       } catch {
