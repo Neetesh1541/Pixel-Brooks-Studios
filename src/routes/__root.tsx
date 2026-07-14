@@ -21,7 +21,10 @@ function NotFoundComponent() {
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist.
         </p>
-        <Link to="/" className="mt-6 inline-flex glass rounded-full px-6 py-3 text-sm font-medium hover:glow-brand transition-all">
+        <Link
+          to="/"
+          className="mt-6 inline-flex glass rounded-full px-6 py-3 text-sm font-medium hover:glow-brand transition-all"
+        >
           Go home
         </Link>
       </div>
@@ -42,8 +45,21 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="text-2xl font-semibold">Something went wrong</h1>
         <p className="mt-2 text-sm text-muted-foreground">Try refreshing or head home.</p>
         <div className="mt-6 flex justify-center gap-3">
-          <button onClick={() => { router.invalidate(); reset(); }} className="glass rounded-full px-5 py-2.5 text-sm hover:glow-brand transition-all">Try again</button>
-          <a href="/" className="glass rounded-full px-5 py-2.5 text-sm hover:glow-brand transition-all">Go home</a>
+          <button
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
+            className="glass rounded-full px-5 py-2.5 text-sm hover:glow-brand transition-all"
+          >
+            Try again
+          </button>
+          <a
+            href="/"
+            className="glass rounded-full px-5 py-2.5 text-sm hover:glow-brand transition-all"
+          >
+            Go home
+          </a>
         </div>
       </div>
     </div>
@@ -56,18 +72,38 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Pixel Brook — Design. Develop. Automate." },
-      { name: "description", content: "Pixel Brook is a premium digital agency building websites, brands, SaaS platforms, mobile apps and AI automations for founders shaping the next decade." },
+      {
+        name: "description",
+        content:
+          "Pixel Brook is a premium digital agency building websites, brands, SaaS platforms, mobile apps and AI automations for founders shaping the next decade.",
+      },
       { name: "author", content: "Pixel Brook" },
       { property: "og:site_name", content: "Pixel Brook" },
       { property: "og:title", content: "Pixel Brook — Design. Develop. Automate." },
-      { property: "og:description", content: "Pixel Brook is a premium digital agency building websites, brands, SaaS platforms, mobile apps and AI automations for founders shaping the next decade." },
+      {
+        property: "og:description",
+        content:
+          "Pixel Brook is a premium digital agency building websites, brands, SaaS platforms, mobile apps and AI automations for founders shaping the next decade.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#1a4a8a" },
       { name: "twitter:title", content: "Pixel Brook — Design. Develop. Automate." },
-      { name: "twitter:description", content: "Pixel Brook is a premium digital agency building websites, brands, SaaS platforms, mobile apps and AI automations for founders shaping the next decade." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/13f3a315-19d6-4e32-856e-eb72d9597150" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/13f3a315-19d6-4e32-856e-eb72d9597150" },
+      {
+        name: "twitter:description",
+        content:
+          "Pixel Brook is a premium digital agency building websites, brands, SaaS platforms, mobile apps and AI automations for founders shaping the next decade.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/13f3a315-19d6-4e32-856e-eb72d9597150",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/13f3a315-19d6-4e32-856e-eb72d9597150",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -75,7 +111,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/pixelbrook-favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap",
+      },
     ],
     scripts: [
       {
@@ -83,14 +122,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
+          "@id": "https://www.pixelbrook.studio/#organization",
           name: "Pixel Brook",
           alternateName: "Pixel Brook Studio",
+          url: "https://www.pixelbrook.studio/",
+          logo: "https://www.pixelbrook.studio/pixelbrook-favicon.png",
+          description:
+            "Pixel Brook is a digital agency building websites, brands, SaaS platforms, mobile apps and AI automations.",
           email: "pixelbrookstudio@gmail.com",
           telephone: ["+91-82188-28273", "+91-80770-67635"],
+          founder: [
+            { "@type": "Person", name: "Neetesh Sharma", url: "https://www.neetesh.tech" },
+            { "@type": "Person", name: "Deependra Pal Singh" },
+          ],
           sameAs: [
             "https://www.instagram.com/pixelbrook.store",
             "https://www.linkedin.com/company/pixelbrook-studio/",
           ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "@id": "https://www.pixelbrook.studio/#website",
+          name: "Pixel Brook",
+          url: "https://www.pixelbrook.studio/",
+          publisher: { "@id": "https://www.pixelbrook.studio/#organization" },
+          inLanguage: "en",
         }),
       },
     ],
@@ -114,7 +174,10 @@ function RootShell({ children }: { children: ReactNode }) {
           }}
         />
       </head>
-      <body>{children}<Scripts /></body>
+      <body>
+        {children}
+        <Scripts />
+      </body>
     </html>
   );
 }

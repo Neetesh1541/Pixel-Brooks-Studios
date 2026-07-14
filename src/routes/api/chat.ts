@@ -19,10 +19,9 @@ export const Route = createFileRoute("/api/chat")({
 
         const key = process.env.LOVABLE_API_KEY;
         if (!key) {
-          return new Response(
-            "AI is not configured. Please contact pixelbrookstudio@gmail.com.",
-            { status: 500 },
-          );
+          return new Response("AI is not configured. Please contact pixelbrookstudio@gmail.com.", {
+            status: 500,
+          });
         }
 
         const system: ChatMessage = {

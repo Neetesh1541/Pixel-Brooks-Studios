@@ -12,7 +12,10 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
         const next = p + Math.random() * 14 + 4;
         if (next >= 100) {
           clearInterval(t);
-          setTimeout(() => { setGone(true); setTimeout(onDone, 700); }, 400);
+          setTimeout(() => {
+            setGone(true);
+            setTimeout(onDone, 700);
+          }, 400);
           return 100;
         }
         return next;
@@ -21,6 +24,8 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
     return () => clearInterval(t);
   }, [onDone]);
 
+  const word = "Pixel Brook";
+
   return (
     <AnimatePresence>
       {!gone && (
@@ -28,6 +33,9 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: "blur(20px)" }}
           transition={{ duration: 0.7 }}
+          role="status"
+          aria-live="polite"
+          aria-label="Loading Pixel Brook"
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background overflow-hidden"
         >
           <div className="absolute inset-0 bg-aurora animate-aurora opacity-70" />
@@ -40,25 +48,54 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
             className="relative z-10 flex flex-col items-center"
           >
             <div className="relative">
+              <motion.div
+                className="absolute inset-[-14px] rounded-full"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, var(--brand-a), var(--brand-mid), var(--brand-b), var(--brand-a))",
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3.2, ease: "linear", repeat: Infinity }}
+              />
+              <div className="absolute inset-[-10px] rounded-full bg-background" />
               <div className="absolute inset-0 rounded-full animate-pulse-ring border border-foreground/20" />
-              <div className="absolute inset-0 rounded-full animate-pulse-ring border border-foreground/10" style={{ animationDelay: "0.6s" }} />
-              <div className="relative h-32 w-32 rounded-3xl glass-strong flex items-center justify-center glow-brand">
-                <img src={logoUrl} alt="Pixel Brook" className="h-24 w-24 object-contain" />
-              </div>
+              <div
+                className="absolute inset-0 rounded-full animate-pulse-ring border border-foreground/10"
+                style={{ animationDelay: "0.6s" }}
+              />
+              <motion.div
+                className="relative h-32 w-32 rounded-3xl glass-strong flex items-center justify-center glow-brand"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 2.6, ease: "easeInOut", repeat: Infinity }}
+              >
+                <img
+                  src={logoUrl}
+                  alt="Pixel Brook"
+                  width={96}
+                  height={96}
+                  className="h-24 w-24 object-contain"
+                />
+              </motion.div>
             </div>
 
-            <motion.h1
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="mt-8 text-4xl font-bold tracking-tight text-gradient font-display"
-            >
-              Pixel Brook
-            </motion.h1>
+            <h1 className="mt-8 flex text-4xl font-bold tracking-tight font-display" aria-hidden>
+              {word.split("").map((ch, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ y: 24, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.25 + i * 0.035, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className={ch === " " ? "inline-block w-2" : "text-gradient inline-block"}
+                >
+                  {ch === " " ? "\u00A0" : ch}
+                </motion.span>
+              ))}
+            </h1>
+            <span className="sr-only">Pixel Brook</span>
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
+              transition={{ delay: 0.7 }}
               className="mt-2 text-xs uppercase tracking-[0.4em] text-muted-foreground"
             >
               Design · Develop · Automate
